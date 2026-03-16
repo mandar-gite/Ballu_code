@@ -1350,9 +1350,10 @@ ${run.agentOutput ? `Output: ${run.agentOutput.slice(0, 200)}...` : ""}`,
         const headers = jiraAuthHeaders(creds.email, creds.apiToken);
         const results: string[] = [];
 
+        const updateHost = normalizeJiraHost(creds.domain);
+
         // Transition if requested
         if (transitionName) {
-          const updateHost = normalizeJiraHost(creds.domain);
           const transRes = await fetch(`https://${updateHost}/rest/api/3/issue/${issueKey}/transitions`, {
             headers,
           });
