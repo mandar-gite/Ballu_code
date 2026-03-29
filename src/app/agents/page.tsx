@@ -120,7 +120,7 @@ export default function AgentsPage() {
     skills?: string[];
     secondaryProjectPath?: string | null;
     permissionMode?: 'normal' | 'auto' | 'bypass';
-    effort?: 'low' | 'medium' | 'high' | null;
+    effort?: 'low' | 'medium' | 'high';
     name?: string;
     character?: AgentCharacter;
     model?: string | null;

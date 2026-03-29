@@ -344,7 +344,7 @@ export default function NewChatModal({
         skills: selectedSkills,
         secondaryProjectPath: secondaryPath || null,
         permissionMode,
-        effort: effort || null,
+        effort: effort || undefined,
         name: finalName,
         character: agentCharacter,
         model: (model && model !== 'default') ? model : null,

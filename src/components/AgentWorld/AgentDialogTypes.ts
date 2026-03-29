@@ -17,7 +17,7 @@ export interface AgentTerminalDialogProps {
     skills?: string[];
     secondaryProjectPath?: string | null;
     permissionMode?: 'normal' | 'auto' | 'bypass';
-    effort?: 'low' | 'medium' | 'high' | null;
+    effort?: 'low' | 'medium' | 'high';
   }) => Promise<{ success: boolean; error?: string; agent?: AgentStatus }>;
   initialPanel?: PanelType;
   skipHistoricalOutput?: boolean;

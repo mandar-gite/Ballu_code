@@ -489,16 +489,20 @@ export default function UsagePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* 5-Hour Quota */}
             {data.rateLimits.five_hour && (() => {
-              const pct = data.rateLimits.five_hour!.used_percentage;
+              const rawPct = data.rateLimits.five_hour!.used_percentage;
               const resetsAt = data.rateLimits.five_hour!.resets_at;
               const now = Date.now() / 1000;
+              const isStale = resetsAt < now;
+              const pct = isStale ? 0 : rawPct;
               const remainingSec = Math.max(0, resetsAt - now);
               const remainingMin = Math.floor(remainingSec / 60);
               const remainingH = Math.floor(remainingMin / 60);
               const remainingM = remainingMin % 60;
-              const resetLabel = remainingH > 0
-                ? `${remainingH}h ${remainingM}m`
-                : `${remainingM}m`;
+              const resetLabel = isStale
+                ? 'Window reset — awaiting update'
+                : remainingH > 0
+                  ? `Resets in ${remainingH}h ${remainingM}m`
+                  : `Resets in ${remainingM}m`;
               const barColor = pct >= 90 ? 'bg-accent-red' : pct >= 70 ? 'bg-accent-amber' : 'bg-accent-green';
 
               return (
@@ -519,7 +523,7 @@ export default function UsagePage() {
                   </div>
                   <div className="flex items-center gap-1 mt-1.5 text-xs text-text-muted">
                     <Timer className="w-3 h-3" />
-                    <span>Resets in {resetLabel}</span>
+                    <span>{resetLabel}</span>
                   </div>
                 </div>
               );
@@ -527,16 +531,20 @@ export default function UsagePage() {
 
             {/* 7-Day Quota */}
             {data.rateLimits.seven_day && (() => {
-              const pct = data.rateLimits.seven_day!.used_percentage;
+              const rawPct = data.rateLimits.seven_day!.used_percentage;
               const resetsAt = data.rateLimits.seven_day!.resets_at;
               const now = Date.now() / 1000;
+              const isStale = resetsAt < now;
+              const pct = isStale ? 0 : rawPct;
               const remainingSec = Math.max(0, resetsAt - now);
               const remainingH = Math.floor(remainingSec / 3600);
               const remainingD = Math.floor(remainingH / 24);
               const remainingHMod = remainingH % 24;
-              const resetLabel = remainingD > 0
-                ? `${remainingD}d ${remainingHMod}h`
-                : `${remainingH}h`;
+              const resetLabel = isStale
+                ? 'Window reset — awaiting update'
+                : remainingD > 0
+                  ? `Resets in ${remainingD}d ${remainingHMod}h`
+                  : `Resets in ${remainingH}h`;
               const barColor = pct >= 90 ? 'bg-accent-red' : pct >= 70 ? 'bg-accent-amber' : 'bg-accent-green';
 
               return (
@@ -557,7 +565,7 @@ export default function UsagePage() {
                   </div>
                   <div className="flex items-center gap-1 mt-1.5 text-xs text-text-muted">
                     <Timer className="w-3 h-3" />
-                    <span>Resets in {resetLabel}</span>
+                    <span>{resetLabel}</span>
                   </div>
                 </div>
               );
@@ -741,7 +749,7 @@ export default function UsagePage() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.2 }}
-            className="flex items-end gap-1 flex-1"
+            className="flex items-stretch gap-1 flex-1"
           >
             {costChartData.length === 0 ? (
               <div className="flex-1 flex items-center justify-center text-text-muted text-sm">
@@ -788,13 +796,13 @@ export default function UsagePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25 }}
-          className="rounded-none border border-border-primary bg-bg-secondary p-5 h-[340px] flex flex-col"
+          className="rounded-none border border-border-primary bg-bg-secondary p-5 flex flex-col"
         >
           <div className="text-sm font-medium mb-4 flex items-center gap-2">
             <Bot className="w-4 h-4 text-text-muted" />
             Model Usage Breakdown
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1 min-h-0 overflow-hidden">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1">
             {/* Pie Chart */}
             <div className="flex flex-col items-center justify-center">
               {(() => {
@@ -882,7 +890,7 @@ export default function UsagePage() {
             </div>
 
             {/* Model details */}
-            <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 max-h-72 overflow-y-auto pr-3">
+            <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
               {modelCostBreakdown.length > 0 ? modelCostBreakdown.map((model) => {
                 const isOpus = model.displayName.toLowerCase().includes('opus');
                 const isSonnet = model.displayName.toLowerCase().includes('sonnet');

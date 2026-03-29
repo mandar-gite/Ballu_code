@@ -58,7 +58,7 @@ export interface NewChatModalProps {
     skills?: string[];
     secondaryProjectPath?: string | null;
     permissionMode?: AgentPermissionMode;
-    effort?: AgentEffort | null;
+    effort?: AgentEffort;
     name?: string;
     character?: AgentCharacter;
     model?: string | null;
