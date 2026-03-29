@@ -90,12 +90,10 @@ export default function Sidebar({ isMobile = false }: SidebarProps) {
         initial={false}
         animate={{ width: sidebarWidth }}
         transition={{ duration: 0.2, ease: 'easeInOut' }}
-        className="fixed left-0 top-0 h-screen bg-card border-r-2 border-r-primary/30 flex-col z-50 hidden lg:flex"
+        className="fixed left-0 top-0 h-screen bg-card border-r border-border flex-col z-50 hidden lg:flex"
       >
-        {/* Drag region - covers macOS traffic light area */}
-        <div className="window-drag h-7 shrink-0" />
-        {/* Logo */}
-        <div className="h-16 flex items-center px-4 border-b border-border">
+        {/* Logo — top area also serves as drag region for macOS traffic lights */}
+        <div className="window-drag flex items-center px-4 pt-5 pb-4 border-b border-border shrink-0">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg overflow-hidden shrink-0">
               <img src="/dorothy-without-text.png" alt="Dorothy" className="w-full h-full object-cover scale-150" />
@@ -119,9 +117,9 @@ export default function Sidebar({ isMobile = false }: SidebarProps) {
                 key={item.href}
                 href={item.href}
                 className={`
-                  group flex items-center gap-3 px-3 py-2.5 transition-all duration-150
+                  group flex items-center gap-3 px-3 py-2.5 transition-all duration-150 cursor-pointer
                   ${isActive
-                    ? 'bg-primary/20 text-primary font-medium border-l-2 border-primary'
+                    ? 'bg-primary/20 text-primary font-medium'
                     : 'text-muted-foreground hover:text-foreground hover:bg-secondary'
                   }
                 `}
@@ -155,9 +153,9 @@ export default function Sidebar({ isMobile = false }: SidebarProps) {
             <>
               <Link
                 href="/whats-new"
-                className={`flex items-center gap-3 px-5 py-3 transition-colors ${
+                className={`flex items-center gap-3 px-5 py-3 transition-colors cursor-pointer ${
                   pathname === '/whats-new'
-                    ? 'bg-primary/20 text-primary border-l-2 border-primary'
+                    ? 'bg-primary/20 text-primary'
                     : 'text-muted-foreground hover:text-foreground hover:bg-secondary'
                 }`}
               >
@@ -174,14 +172,12 @@ export default function Sidebar({ isMobile = false }: SidebarProps) {
                   </span>
                 )}
               </Link>
-              <div className="px-4 py-3 border-t border-border">
-                <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                  </span>
-                  <span>Connected</span>
-                </div>
+              <div className="flex items-center gap-3 px-5 py-3 border-t border-border text-muted-foreground text-sm">
+                <span className="relative flex w-5 h-5 items-center justify-center">
+                  <span className="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-green-500 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                </span>
+                <span>Connected</span>
               </div>
             </>
           )}
@@ -209,9 +205,9 @@ export default function Sidebar({ isMobile = false }: SidebarProps) {
           <Link
             href="/settings"
             className={`
-              flex items-center gap-3 px-5 py-3 transition-colors
+              flex items-center gap-3 px-5 py-3 transition-colors cursor-pointer
               ${pathname === '/settings' || pathname.startsWith('/settings/')
-                ? 'bg-primary/20 text-primary border-l-2 border-primary'
+                ? 'bg-primary/20 text-primary'
                 : 'text-muted-foreground hover:text-foreground hover:bg-secondary'
               }
             `}
@@ -236,14 +232,14 @@ export default function Sidebar({ isMobile = false }: SidebarProps) {
           </Link>
           <button
             onClick={toggleDarkMode}
-            className="w-full flex items-center gap-3 px-5 py-3 text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+            className="w-full flex items-center gap-3 px-5 py-3 text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors cursor-pointer"
           >
             {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             {showLabels && <span className="text-sm">{darkMode ? 'Light Mode' : 'Dark Mode'}</span>}
           </button>
           <button
             onClick={toggleSidebar}
-            className="w-full flex items-center gap-3 px-5 py-3 text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+            className="w-full flex items-center gap-3 px-5 py-3 text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors cursor-pointer"
           >
             {sidebarCollapsed ? (
               <ChevronRight className="w-5 h-5" />
@@ -295,7 +291,7 @@ export default function Sidebar({ isMobile = false }: SidebarProps) {
                   className={`
                     group flex items-center gap-3 px-3 py-2.5 transition-all duration-150
                     ${isActive
-                      ? 'bg-primary/20 text-primary font-medium border-l-2 border-primary'
+                      ? 'bg-primary/20 text-primary font-medium'
                       : 'text-muted-foreground hover:text-foreground hover:bg-secondary'
                     }
                   `}
@@ -321,9 +317,9 @@ export default function Sidebar({ isMobile = false }: SidebarProps) {
             <Link
               href="/whats-new"
               onClick={handleNavClick}
-              className={`flex items-center gap-3 px-5 py-3 transition-colors ${
+              className={`flex items-center gap-3 px-5 py-3 transition-colors cursor-pointer ${
                 pathname === '/whats-new'
-                  ? 'bg-primary/20 text-primary border-l-2 border-primary'
+                  ? 'bg-primary/20 text-primary'
                   : 'text-muted-foreground hover:text-foreground hover:bg-secondary'
               }`}
             >
@@ -357,9 +353,9 @@ export default function Sidebar({ isMobile = false }: SidebarProps) {
               href="/settings"
               onClick={handleNavClick}
               className={`
-                flex items-center gap-3 px-5 py-3 transition-colors
+                flex items-center gap-3 px-5 py-3 transition-colors cursor-pointer
                 ${pathname === '/settings' || pathname.startsWith('/settings/')
-                  ? 'bg-primary/20 text-primary border-l-2 border-primary'
+                  ? 'bg-primary/20 text-primary'
                   : 'text-muted-foreground hover:text-foreground hover:bg-secondary'
                 }
               `}
@@ -383,7 +379,7 @@ export default function Sidebar({ isMobile = false }: SidebarProps) {
             </Link>
             <button
               onClick={toggleDarkMode}
-              className="w-full flex items-center gap-3 px-5 py-3 text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+              className="w-full flex items-center gap-3 px-5 py-3 text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors cursor-pointer"
             >
               {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
               <span className="text-sm">{darkMode ? 'Light Mode' : 'Dark Mode'}</span>

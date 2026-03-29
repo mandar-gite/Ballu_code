@@ -8,7 +8,8 @@ interface CreateAgentConfig {
   character?: AgentCharacter;
   name?: string;
   secondaryProjectPath?: string;
-  skipPermissions?: boolean;
+  permissionMode?: 'normal' | 'auto' | 'bypass';
+  effort?: 'low' | 'medium' | 'high';
 }
 
 interface UseAgentActionsProps {
@@ -72,10 +73,14 @@ export function useAgentActions({
     character?: AgentCharacter,
     name?: string,
     secondaryProjectPath?: string,
-    skipPermissions?: boolean
+    permissionMode?: 'normal' | 'auto' | 'bypass',
+    _provider?: string,
+    _localModel?: string,
+    _obsidianVaultPaths?: string[],
+    effort?: 'low' | 'medium' | 'high',
   ) => {
     try {
-      const agent = await createAgent({ projectPath, skills, worktree, character, name, secondaryProjectPath, skipPermissions });
+      const agent = await createAgent({ projectPath, skills, worktree, character, name, secondaryProjectPath, permissionMode, effort });
       setShowCreateAgentModal(false);
       setCreateAgentProjectPath(null);
 
@@ -116,10 +121,26 @@ export function useAgentActions({
       }
     }
 
-    // Open the create agent modal so the user can select a project
-    setShowCreateAgentModal(true);
-    setCreateSuperAgent(true);
-  }, [superAgent, startAgent, setTerminalAgentId]);
+    setIsCreatingSuperAgent(true);
+    try {
+      const projectPath = projects[0]?.path || '/tmp';
+
+      const agent = await createAgent({
+        projectPath,
+        skills: [],
+        character: 'wizard',
+        name: 'Super Agent (Orchestrator)',
+        permissionMode: 'auto',
+      });
+
+      await startAgent(agent.id, orchestratorPrompt);
+      setTerminalAgentId(agent.id);
+    } catch (error) {
+      console.error('Failed to create super agent:', error);
+    } finally {
+      setIsCreatingSuperAgent(false);
+    }
+  }, [superAgent, projects, createAgent, startAgent, setTerminalAgentId]);
 
   const closeCreateAgentModal = useCallback(() => {
     setShowCreateAgentModal(false);
